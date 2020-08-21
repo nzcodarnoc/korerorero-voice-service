@@ -27,6 +27,10 @@
     "typescript": "^4.0.2"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "axios": "^0.19.2",
+    "envalid": "^6.0.2",
+    "express": "^4.17.1",
+    "helmet": "^4.1.0",
+    "slugify": "^1.4.5"
   }
 }
