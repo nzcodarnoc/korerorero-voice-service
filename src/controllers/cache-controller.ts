@@ -5,7 +5,7 @@ import crypto from "crypto";
 import slugify from "slugify";
 import { ShapesPayload } from "../types";
 import axios from "axios";
-import { MOUTH_SHAPES } from "../utils";
+import { MOUTH_SHAPES, VOICE_CACHE } from "../utils";
 import fs from "fs";
 
 function filenameHash(phrase: string) {
@@ -26,7 +26,7 @@ function filenameHash(phrase: string) {
 
 export default async (req: Request, res: Response, next: NextFunction) => {
   const message = String(req.body.message);
-  const filename = filenameHash(message);
+  const filename = VOICE_CACHE + "/" + filenameHash(message);
   const ttsCall = await ttsController(message);
   const mouthShapes: ShapesPayload = await mouthShapesController(ttsCall);
   await saveAudio(mouthShapes.data.metadata.soundFile, filename);
