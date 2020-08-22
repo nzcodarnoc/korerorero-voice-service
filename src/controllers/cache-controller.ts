@@ -26,7 +26,7 @@ function filenameHash(phrase: string) {
 
 export default async (req: Request, res: Response, next: NextFunction) => {
   const message = String(req.body.message);
-  const filename = VOICE_CACHE + "/" + filenameHash(message);
+  const filename = filenameHash(message);
   const ttsCall = await ttsController(message);
   const mouthShapes: ShapesPayload = await mouthShapesController(ttsCall);
   await saveAudio(mouthShapes.data.metadata.soundFile, filename);
@@ -36,7 +36,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 };
 
 function saveJson(filename: string, mouthShapes: ShapesPayload) {
-  fs.writeFileSync(filename + ".json", JSON.stringify(mouthShapes.data))
+  fs.writeFileSync(VOICE_CACHE + "/" + filename + ".json", JSON.stringify(mouthShapes.data))
 }
  
 async function saveAudio(source: string, destination: string) {
@@ -46,7 +46,7 @@ async function saveAudio(source: string, destination: string) {
     responseType: "stream",
   })
     .then(function (response) {
-      response.data.pipe(fs.createWriteStream(destination));
+      response.data.pipe(fs.createWriteStream(VOICE_CACHE + "/" + destination));
     })
     .catch(function (error) {
       console.log(error);
