@@ -43,7 +43,7 @@ export async function cache(message: string) {
   const ttsCall = await ttsController(message);
   const mouthShapes: ShapesPayload = await mouthShapesController(ttsCall);
   await saveAudio(mouthShapes.data.metadata.soundFile, filename);
-  mouthShapes.data.metadata.soundFile = filename;
+  mouthShapes.data.metadata.soundFile = "audio/" + filename;
   saveJson(filename, mouthShapes);
   return mouthShapes;
 }

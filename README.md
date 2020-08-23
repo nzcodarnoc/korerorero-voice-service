@@ -27,14 +27,9 @@ docker run \
     korerorero-voice-service:dev
 ```
 
-## Start dependant services in korerorero-reverse-proxy
-
-```bash
-docker-compose run -p 3005:3005 mouth-shapes
-```
-
 ## Populate cache
 
 ```bash
 docker-compose build
 docker-compose run voice-service ./node_modules/.bin/ts-node cli/watson-cache.ts
+```

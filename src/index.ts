@@ -3,6 +3,7 @@ import express from "express";
 import helmet from "helmet";
 import { PORT } from "./utils";
 import cacheController from "./controllers/cache-controller";
+import audioController from "./controllers/audio-controller";
 import bodyParser from "body-parser";
 
 dotenv.config();
@@ -22,6 +23,7 @@ app.get("/", (_req, res) => {
 
 // ANCHOR /request
 app.post("/request-speech", cacheController);
+app.get("/audio/:audioFile", audioController);
 
 const server = app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
