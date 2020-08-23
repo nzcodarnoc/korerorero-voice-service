@@ -19,14 +19,22 @@ function filenameHash(phrase: string) {
       strict: true,
       locale: "en",
     }) +
-    "_" +
-    hash
+      "_" +
+      hash
   );
 }
 
 export default async (req: Request, res: Response, next: NextFunction) => {
   const message = String(req.body.message);
-  const shapesPayload = await cache(message)
+  const filename = filenameHash(message);
+  let shapesPayload;
+  if (fs.existsSync(withPath(filename))) {
+    shapesPayload = {
+      data: JSON.parse(String(fs.readFileSync(withPath(filename + ".json")))),
+    };
+  } else {
+    shapesPayload = await cache(message);
+  }
   res.json(shapesPayload.data);
 };
 
@@ -37,12 +45,12 @@ export async function cache(message: string) {
   await saveAudio(mouthShapes.data.metadata.soundFile, filename);
   mouthShapes.data.metadata.soundFile = filename;
   saveJson(filename, mouthShapes);
-  return mouthShapes
+  return mouthShapes;
 }
 
 function saveJson(filename: string, mouthShapes: ShapesPayload) {
   fs.writeFileSync(
-    VOICE_CACHE + "/" + filename + ".json",
+    withPath(filename + ".json"),
     JSON.stringify(mouthShapes.data)
   );
 }
@@ -54,9 +62,13 @@ async function saveAudio(source: string, destination: string) {
     responseType: "stream",
   })
     .then(function (response) {
-      response.data.pipe(fs.createWriteStream(VOICE_CACHE + "/" + destination));
+      response.data.pipe(fs.createWriteStream(withPath(destination)));
     })
     .catch(function (error) {
       console.log(error);
     });
+}
+
+function withPath(file: string) {
+  return VOICE_CACHE + "/" + file;
 }
