@@ -20,6 +20,7 @@ To run
 
 ```bash
 docker run \
+    --init \
     -p 4000:4000 \
     --env-file .env \
     --mount source=korerorero-voice-service-cache,target=/voice-cache \
@@ -29,5 +30,11 @@ docker run \
 ## Start dependant services in korerorero-reverse-proxy
 
 ```bash
-docker-compose run -p 3005:3005 -e IS_DEV=true -e TMP_DIR=/tmp/ mouth-shapes
+docker-compose run -p 3005:3005 mouth-shapes
 ```
+
+## Populate cache
+
+```bash
+docker-compose build
+docker-compose run voice-service ./node_modules/.bin/ts-node cli/watson-cache.ts

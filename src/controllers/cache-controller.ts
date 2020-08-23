@@ -26,14 +26,19 @@ function filenameHash(phrase: string) {
 
 export default async (req: Request, res: Response, next: NextFunction) => {
   const message = String(req.body.message);
+  const shapesPayload = await cache(message)
+  res.json(shapesPayload.data);
+};
+
+export async function cache(message: string) {
   const filename = filenameHash(message);
   const ttsCall = await ttsController(message);
   const mouthShapes: ShapesPayload = await mouthShapesController(ttsCall);
   await saveAudio(mouthShapes.data.metadata.soundFile, filename);
   mouthShapes.data.metadata.soundFile = filename;
   saveJson(filename, mouthShapes);
-  res.json(mouthShapes.data);
-};
+  return mouthShapes
+}
 
 function saveJson(filename: string, mouthShapes: ShapesPayload) {
   fs.writeFileSync(
