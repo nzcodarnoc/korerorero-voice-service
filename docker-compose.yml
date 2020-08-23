@@ -1,0 +1,38 @@
+version: '3.8'
+volumes:
+  korerorero-voice-service-cache:
+    external: true
+services:
+  voice-service:
+    image: korerorero-voice-service:dev
+    container_name: voice_service_korerorero-voice-service
+    build:
+      context: .
+    user: "1000:1000" # this sets the owner of the /voice-cache mount
+    volumes:
+      - korerorero-voice-service-cache:/voice-cache:rw
+    networks:
+      - default
+    env_file:
+      - .env
+    links:
+      - mouth-shapes
+  mouth-shapes:
+    image: korerorero-mouth-shapes:v0.1.1
+    container_name: voice_service_korerorero-mouth-shapes
+    env_file:
+      - mouth-shapes.env
+    build:
+      context: https://github.com/nzcodarnoc/korerorero-mouth-shapes.git#v0.1.1
+    networks:
+      - default  
+    links:
+      - tts      
+  tts:
+    image: korerorero-tts:v1.0.1
+    container_name: voice_service_korerorero-tts
+    build:
+      context: https://github.com/nzcodarnoc/korerorero-marytts.git#v1.0.1
+    networks:
+      - default
+      
