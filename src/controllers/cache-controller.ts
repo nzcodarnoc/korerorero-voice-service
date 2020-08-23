@@ -13,8 +13,8 @@ function filenameHash(phrase: string) {
     .createHash("sha256")
     .update(phrase, "utf8")
     .digest("base64");
-  return (
-    slugify(phrase.substring(0, 12), {
+  return encodeURIComponent(
+    slugify(phrase.substring(0, 24), {
       lower: true,
       strict: true,
       locale: "en",
@@ -31,14 +31,17 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   const mouthShapes: ShapesPayload = await mouthShapesController(ttsCall);
   await saveAudio(mouthShapes.data.metadata.soundFile, filename);
   mouthShapes.data.metadata.soundFile = filename;
-  saveJson(filename, mouthShapes)
+  saveJson(filename, mouthShapes);
   res.json(mouthShapes.data);
 };
 
 function saveJson(filename: string, mouthShapes: ShapesPayload) {
-  fs.writeFileSync(VOICE_CACHE + "/" + filename + ".json", JSON.stringify(mouthShapes.data))
+  fs.writeFileSync(
+    VOICE_CACHE + "/" + filename + ".json",
+    JSON.stringify(mouthShapes.data)
+  );
 }
- 
+
 async function saveAudio(source: string, destination: string) {
   return axios({
     method: "get",

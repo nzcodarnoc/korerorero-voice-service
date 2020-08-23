@@ -1,10 +1,9 @@
 import * as dotenv from "dotenv";
-import envalid, { bool, port, url, str } from "envalid";
+import envalid, { port, url, str } from "envalid";
 dotenv.config();
 
 const env = envalid.cleanEnv(process.env, {
   PORT: port(),
-  IS_DEV: bool(),
   TTS: url(),
   MOUTH_SHAPES: url(),
   VOICE_CACHE: str(),
