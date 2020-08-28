@@ -4,7 +4,7 @@ volumes:
     external: true
 services:
   voice-service:
-    image: korerorero-voice-service:dev
+    image: nzcodarnoc/korerorero-voice-service:dev
     container_name: voice_service_korerorero-voice-service
     build:
       context: .
@@ -18,7 +18,7 @@ services:
     links:
       - mouth-shapes
   mouth-shapes:
-    image: korerorero-mouth-shapes:v0.1.1
+    image: nzcodarnoc/korerorero-mouth-shapes:v0.1.1
     container_name: voice_service_korerorero-mouth-shapes
     env_file:
       - mouth-shapes.env
@@ -29,7 +29,7 @@ services:
     links:
       - tts      
   tts:
-    image: korerorero-tts:v1.0.1
+    image: nzcodarnoc/korerorero-tts:v1.0.1
     container_name: voice_service_korerorero-tts
     build:
       context: https://github.com/nzcodarnoc/korerorero-marytts.git#v1.0.1

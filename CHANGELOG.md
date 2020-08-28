@@ -6,7 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.0.1] - 2020-08-23
+## [0.1.1] - 2020-08-29
+### Added
+- Change image name and tag to match dockerhub images
+
+## [0.1.0] - 2020-08-23
 ### Added
 - Service created
 - CLI to populate cache
